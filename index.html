@@ -1,28 +1,97 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Tool Interface</title>
+  <title>Input Processor</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+  <meta http-equiv="Pragma" content="no-cache" />
+  <meta http-equiv="Expires" content="0" />
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 20px;
+      background-color: #f5f5f5;
+    }
+
+    h2 {
+      margin-bottom: 10px;
+    }
+
+    textarea, input {
+      width: 100%;
+      box-sizing: border-box;
+      margin-bottom: 10px;
+    }
+
+    textarea {
+      font-family: monospace;
+      font-size: 14px;
+      padding: 10px;
+      resize: vertical;
+      min-height: 200px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      background-color: #ffffff;
+    }
+
+    input[type="password"] {
+      padding: 10px;
+      font-size: 14px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+    }
+
+    button {
+      padding: 10px 20px;
+      font-size: 16px;
+      background-color: #007bff;
+      color: white;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background-color: #0056b3;
+    }
+
+    #outputArea {
+      margin-top: 20px;
+      padding: 10px;
+      font-family: monospace;
+      font-size: 14px;
+      background-color: #ffffff;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      white-space: pre-wrap;
+      min-height: 150px;
+    }
+  </style>
 </head>
 <body>
-  <h2>Input Processor</h2>
+  <h2>Code Input Processor</h2>
 
-  <!-- Primary Input -->
-  <textarea id="fieldA" rows="5" cols="50" placeholder="Enter data..."></textarea><br>
+  <!-- Large Code Input -->
+  <textarea id="fieldA" placeholder="Enter your code or text here..."></textarea>
 
-  <!-- Secondary Input -->
-  <input type="password" id="fieldB" placeholder="Additional code"><br><br>
+  <!-- Token Input -->
+  <input type="password" id="fieldB" placeholder="Enter access token">
 
-  <!-- Action Button -->
+  <!-- Submit Button -->
   <button onclick="submitData()">Submit</button>
 
   <!-- Output Display -->
-  <div id="outputArea" style="white-space: pre-wrap; margin-top: 20px;"></div>
+  <div id="outputArea">Awaiting input...</div>
 
   <script>
     async function submitData() {
-      const fieldAValue = document.getElementById("fieldA").value;
-      const fieldBValue = document.getElementById("fieldB").value;
+      const fieldA = document.getElementById("fieldA");
+      const fieldB = document.getElementById("fieldB");
       const outputArea = document.getElementById("outputArea");
+
+      const fieldAValue = fieldA.value.trim();
+      const fieldBValue = fieldB.value.trim();
 
       if (!fieldAValue || !fieldBValue) {
         outputArea.textContent = "Please complete all fields.";
@@ -37,8 +106,6 @@
         });
 
         const result = await response.json();
-        console.log("Response:", result);  // Debug log
-
         if (result.data) {
           outputArea.textContent = result.data;
         } else if (result.error) {
@@ -49,6 +116,10 @@
       } catch (error) {
         outputArea.textContent = "Fetch error: " + error.message;
       }
+
+      // Clear inputs after submit
+      fieldA.value = "";
+      fieldB.value = "";
     }
   </script>
 </body>
