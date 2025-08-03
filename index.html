@@ -37,9 +37,17 @@
         });
 
         const result = await response.json();
-        outputArea.textContent = result.data || "No response.";
+        console.log("Response:", result);  // Debug log
+
+        if (result.data) {
+          outputArea.textContent = result.data;
+        } else if (result.error) {
+          outputArea.textContent = "Error: " + result.error;
+        } else {
+          outputArea.textContent = "No response.";
+        }
       } catch (error) {
-        outputArea.textContent = "Error: " + error.message;
+        outputArea.textContent = "Fetch error: " + error.message;
       }
     }
   </script>
