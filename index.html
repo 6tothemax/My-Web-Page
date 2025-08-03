@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>My GPT Chat</title>
+</head>
+<body>
+  <h2>My GPT Chat</h2>
+  <textarea id="userInput" rows="5" cols="50" placeholder="Type your text or code..."></textarea><br>
+  <button onclick="sendToGPT()">Send</button>
+  <div id="responseArea" style="white-space: pre-wrap; margin-top: 20px;"></div>
+
+  <script>
+    async function sendToGPT() {
+      const input = document.getElementById("userInput").value;
+      const responseArea = document.getElementById("responseArea");
+
+      const res = await fetch("YOUR_MAKE_WEBHOOK_URL", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ message: input })
+      });
+
+      const data = await res.json();
+      responseArea.textContent = data.reply;  // Update if needed based on your Make.com response format
+    }
+  </script>
+</body>
+</html>
