@@ -1,48 +1,47 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>My GPT Chat</title>
+  <title>Tool Interface</title>
 </head>
 <body>
-  <h2>My GPT Chat</h2>
+  <h2>Input Processor</h2>
 
-  <!-- User Message Input -->
-  <textarea id="userInput" rows="5" cols="50" placeholder="Type your text or code..."></textarea><br>
+  <!-- Primary Input -->
+  <textarea id="fieldA" rows="5" cols="50" placeholder="Enter data..."></textarea><br>
 
-  <!-- Token Input -->
-  <input type="password" id="tokenInput" placeholder="Enter token"><br><br>
+  <!-- Secondary Input -->
+  <input type="password" id="fieldB" placeholder="Additional code"><br><br>
 
-  <!-- Submit Button -->
-  <button onclick="sendToGPT()">Send</button>
+  <!-- Action Button -->
+  <button onclick="submitData()">Submit</button>
 
-  <!-- Response Display -->
-  <div id="responseArea" style="white-space: pre-wrap; margin-top: 20px;"></div>
+  <!-- Output Display -->
+  <div id="outputArea" style="white-space: pre-wrap; margin-top: 20px;"></div>
 
   <script>
-    async function sendToGPT() {
-      const input = document.getElementById("userInput").value;
-      const token = document.getElementById("tokenInput").value;
-      const responseArea = document.getElementById("responseArea");
+    async function submitData() {
+      const fieldAValue = document.getElementById("fieldA").value;
+      const fieldBValue = document.getElementById("fieldB").value;
+      const outputArea = document.getElementById("outputArea");
 
-      if (!input || !token) {
-        responseArea.textContent = "Please enter both your message and the token.";
+      if (!fieldAValue || !fieldBValue) {
+        outputArea.textContent = "Please complete all fields.";
         return;
       }
 
       try {
-        const res = await fetch("YOUR_MAKE_WEBHOOK_URL", {
+        const response = await fetch("YOUR_MAKE_WEBHOOK_URL", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ message: input, token: token })
+          body: JSON.stringify({ a: fieldAValue, b: fieldBValue })
         });
 
-        const data = await res.json();
-        responseArea.textContent = data.reply || "No response received.";
-      } catch (err) {
-        responseArea.textContent = "Error: " + err.message;
+        const result = await response.json();
+        outputArea.textContent = result.data || "No response.";
+      } catch (error) {
+        outputArea.textContent = "Error: " + error.message;
       }
     }
   </script>
 </body>
 </html>
-
