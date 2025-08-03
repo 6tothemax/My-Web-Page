@@ -5,24 +5,44 @@
 </head>
 <body>
   <h2>My GPT Chat</h2>
+
+  <!-- User Message Input -->
   <textarea id="userInput" rows="5" cols="50" placeholder="Type your text or code..."></textarea><br>
+
+  <!-- Token Input -->
+  <input type="password" id="tokenInput" placeholder="Enter token"><br><br>
+
+  <!-- Submit Button -->
   <button onclick="sendToGPT()">Send</button>
+
+  <!-- Response Display -->
   <div id="responseArea" style="white-space: pre-wrap; margin-top: 20px;"></div>
 
   <script>
     async function sendToGPT() {
       const input = document.getElementById("userInput").value;
+      const token = document.getElementById("tokenInput").value;
       const responseArea = document.getElementById("responseArea");
 
-      const res = await fetch("YOUR_MAKE_WEBHOOK_URL", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ message: input })
-      });
+      if (!input || !token) {
+        responseArea.textContent = "Please enter both your message and the token.";
+        return;
+      }
 
-      const data = await res.json();
-      responseArea.textContent = data.reply;  // Update if needed based on your Make.com response format
+      try {
+        const res = await fetch("YOUR_MAKE_WEBHOOK_URL", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ message: input, token: token })
+        });
+
+        const data = await res.json();
+        responseArea.textContent = data.reply || "No response received.";
+      } catch (err) {
+        responseArea.textContent = "Error: " + err.message;
+      }
     }
   </script>
 </body>
 </html>
+
